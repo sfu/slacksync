@@ -4,7 +4,7 @@
   "description": "Scripts to sync its-all to the sfuits Slack",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "ava -v"
   },
   "repository": {
     "type": "git",
@@ -15,8 +15,18 @@
   "bugs": {
     "url": "https://github.com/sfu/slacksync/issues"
   },
+  "ava": {
+    "files": [
+      "src/**/__test__/*.js"
+    ],
+    "require": [
+      "babel-register"
+    ],
+    "babel": "inherit"
+  },
   "homepage": "https://github.com/sfu/slacksync#readme",
   "devDependencies": {
+    "ava": "0.14.0",
     "babel-core": "6.7.7",
     "babel-eslint": "6.0.4",
     "babel-plugin-syntax-async-functions": "6.5.0",
