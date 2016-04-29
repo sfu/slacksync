@@ -3,33 +3,9 @@
 import {getUserBio} from './lib/amaint'
 import {getMaillistMembers} from './lib/maillist'
 import * as slack from './lib/slack'
-import dashdash from 'dashdash'
-import options from './lib/cli_opts'
 import {IGNORE_USERS} from './lib/constants'
 
-const parser = dashdash.createParser({options: options})
-let opts
-try {
-  opts = parser.parse(process.argv)
-} catch (e) {
-  console.error('slacksync: error: %s', e.message)
-  process.exit(1)
-}
-const requiredArgMissing = !opts.maillist || !opts.maillist_token || !opts.art_token || !opts.slack_token
-
-if (opts.help || requiredArgMissing) {
-  const help = parser.help({includeEnv: true}).trimRight()
-  console.log('usage: slacksync [OPTIONS]\n'
-            + 'options:\n'
-            + help)
-  process.exit(0)
-}
-
-if (opts.version) {
-  console.log(`v${require('../package.json').version}`)
-}
-
-(async function() {
+export default async function slacksync(opts) {
   const allSlackUsers = await slack.getUserList(opts.slack_token)
   const activeSlackUsers = allSlackUsers.members.filter(u => {
     return !u.deleted && 
@@ -77,8 +53,7 @@ if (opts.version) {
     }
   })
   console.log(newSlackUsers)
-  
-})(opts)
+}
 
 process.on('unhandledRejection', function(reason, p){
     console.log("Possibly Unhandled Rejection at: Promise ", p, " reason: ", reason)
