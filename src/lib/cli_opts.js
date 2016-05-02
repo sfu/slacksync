@@ -11,10 +11,10 @@ const options = [
   },
   {
     names: ['maillist'],
-    type: 'string',
+    type: 'arrayOfString',
     env: 'SLACKSYNC_MAILLIST_ID',
     helpArg: '12345',
-    help: 'REQUIRED Numeric ID of the source maillist'
+    help: 'REQUIRED Numeric ID of the source maillist. May be repeated.'
   },
   {
     names: ['maillist-token'],
@@ -38,9 +38,29 @@ const options = [
     help: 'REQUIRED Slack API Token'
   },
   {
-    names: ['dry-run', 'd'],
+    names: ['all', 'a'],
     type: 'bool',
-    help: 'Show what would happen but do not send API writes to Slack'
+    help: 'DEFAULT Run all operations (create, reactivate, delete). Same as -cdr'
+  },
+  {
+    names: ['create-users', 'c'],
+    type: 'bool',
+    help: 'Create users in Slack'
+  },
+  {
+    names: ['remove-users', 'd'],
+    type: 'bool',
+    help: 'Delete users from Slack'
+  },
+  {
+    names: ['reactivate-users', 'r'],
+    type: 'bool',
+    help: 'Reactivate deleted users'
+  },
+  {
+    names: ['dry-run', 'x'],
+    type: 'bool',
+    help: 'Dry run.'
   }
 ]
 
