@@ -7,7 +7,9 @@
     "build": "babel src --out-dir node",
     "test": "ava -v"
   },
-  "bin": "node/cli.js",
+  "bin": {
+    "slacksync": "node/cli.js"
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/sfu/slacksync.git"
