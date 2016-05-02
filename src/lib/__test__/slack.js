@@ -2,7 +2,7 @@ import test from 'ava'
 import * as slack from '../slack'
 const {SLACK_TOKEN} = process.env
 
-test.after(async () => {
+test.skip.after(async () => {
   // make sure that kipling is disabled, for reals
   await slack.toggleUserActive('U0H2PR1L3', false, SLACK_TOKEN)
 })
@@ -13,12 +13,12 @@ test('Get a list of slack users', async t => {
   t.truthy(response.members.length > 0)
 })
 
-test('Toggle a user to inactive', async t => {
+test.skip('Toggle a user to inactive', async t => {
   const response = await slack.toggleUserActive('U0H2PR1L3', false, SLACK_TOKEN)
   t.is(response.active, false)
 })
 
-test('Toggle a user to active', async t => {
+test.skip('Toggle a user to active', async t => {
   const response = await slack.toggleUserActive('U0H2PR1L3', true, SLACK_TOKEN)
   t.is(response.active, true)
 })
