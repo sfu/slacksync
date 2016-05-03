@@ -27,7 +27,7 @@ function printUsageAndExit(exitCode=0) {
 
 if (opts.all) {
   opts.create_users = true
-  opts.delete_users = true
+  opts.remove_users = true
   opts.reactivate_users = true
 }
 
