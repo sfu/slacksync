@@ -2,7 +2,7 @@
   "name": "slacksync",
   "version": "1.0.0",
   "description": "Sync SFU Maillists with a Slack team",
-  "main": "node/slacksync",
+  "main": "./node/slacksync",
   "scripts": {
     "build": "rm -rf node && babel src --ignore src/lib/__test__ --out-dir node",
     "test": "ava -v",
