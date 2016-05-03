@@ -42,6 +42,9 @@
   },
   "dependencies": {
     "axios": "0.11.0",
-    "dashdash": "1.13.1"
+    "dashdash": "1.13.1",
+    "moment": "2.13.0",
+    "pluralize": "1.2.1",
+    "slack": "6.1.0"
   }
 }

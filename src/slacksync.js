@@ -4,6 +4,7 @@ import {getUserBio} from './lib/amaint'
 import {getMaillist, getMaillistMembers} from './lib/maillist'
 import * as slack from './lib/slack'
 import {IGNORE_USERS} from './lib/constants'
+import SlackReporter from './lib/slackreporter'
 
 export default async function slacksync(opts) {
   const allSlackUsers = await slack.getUserList(opts.slack_token)
@@ -70,6 +71,14 @@ export default async function slacksync(opts) {
   }
 
   console.log(results)
+    if ((opts.reporter_token && opts.reporter_channel) && (results.created || results.removed || results.reactivated)) {
+      const reporter = new SlackReporter(opts.reporter_channel, opts.reporter_token, results)
+      try {
+        await reporter.post()
+      } catch(e) {
+        console.error(e)
+      }
+    }
 }
 
 async function toggleUsersInSlack(users, state, opts) {
