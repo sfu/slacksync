@@ -145,6 +145,5 @@ async function createUsersInSlack(users, opts) {
 }
 
 process.on('unhandledRejection', function(reason, p){
-    console.log("Possibly Unhandled Rejection at: Promise ", p, " reason: ", reason)
-    // application specific logging here
+  console.error("Possibly Unhandled Rejection at: Promise ", p, " reason: ", reason)
 })
