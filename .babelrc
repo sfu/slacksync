@@ -4,8 +4,9 @@
     "stage-1"
   ],
   "plugins": [
-    "dedent",
     "add-module-exports",
+    "array-includes",
+    "dedent",
     ["transform-runtime", {
       "polyfill": false,
       "regenerator": true
