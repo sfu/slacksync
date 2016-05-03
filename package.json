@@ -1,12 +1,13 @@
 {
   "name": "slacksync",
   "version": "1.0.0",
-  "description": "Scripts to sync its-all to the sfuits Slack",
+  "description": "Sync SFU Maillists with a Slack team",
   "main": "node/slacksync",
   "scripts": {
     "build": "rm -rf node && babel src --ignore src/lib/__test__ --out-dir node",
     "test": "ava -v",
-    "prepublish": "npm run build"
+    "lint": "eslint src",
+    "prepublish": "npm run lint && npm run build"
   },
   "bin": {
     "slacksync": "node/cli.js"
