@@ -10,7 +10,7 @@
     "prepublish": "npm run lint && npm run build"
   },
   "bin": {
-    "slacksync": "node/cli.js"
+    "slacksync": "dist/cli.js"
   },
   "repository": {
     "type": "git",
