@@ -4,7 +4,7 @@
   "description": "Scripts to sync its-all to the sfuits Slack",
   "main": "node/slacksync.js",
   "scripts": {
-    "build": "babel src --out-dir node",
+    "build": "rm -rf node && babel src --out-dir node",
     "test": "ava -v"
   },
   "bin": {
