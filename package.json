@@ -5,7 +5,8 @@
   "main": "node/slacksync.js",
   "scripts": {
     "build": "rm -rf node && babel src --out-dir node",
-    "test": "ava -v"
+    "test": "ava -v",
+    "prepublish": "npm run build"
   },
   "bin": {
     "slacksync": "node/cli.js"
