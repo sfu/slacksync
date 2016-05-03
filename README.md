@@ -47,7 +47,7 @@ The token may also be passed in an environment variable `SLACKSYNC_ART_TOKEN`
 ### Run Modes
 `slacksync` can run in three modes. You must provide at least one of these, or pass `-a | --all` to run all three.
 
-### `--create_users, -c`
+#### `--create_users, -c`
 Create new Slack users based on the membership of the maillist(s) specified in `--maillist`.
 
 #### `--remove-users, -d`
