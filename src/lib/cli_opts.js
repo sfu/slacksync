@@ -10,11 +10,18 @@ const options = [
     help: 'Print this help and exit'
   },
   {
+    names: ['dry-run', 'x'],
+    type: 'bool',
+    help: 'Report what *would* happen, but make no changes to Slack.'
+  },
+  {
     names: ['maillist'],
     type: 'arrayOfString',
-    env: 'SLACKSYNC_MAILLIST_ID',
     helpArg: '12345',
     help: 'REQUIRED Numeric ID of the source maillist. May be repeated.'
+  },
+  {
+    group: 'Authentication Tokens'
   },
   {
     names: ['maillist-token'],
@@ -38,6 +45,9 @@ const options = [
     help: 'REQUIRED Slack API Token'
   },
   {
+    group: 'Run Modes'
+  },
+  {
     names: ['all', 'a'],
     type: 'bool',
     help: 'DEFAULT Run all operations (create, reactivate, delete). Same as -cdr'
@@ -58,9 +68,17 @@ const options = [
     help: 'Reactivate deleted users'
   },
   {
-    names: ['dry-run', 'x'],
-    type: 'bool',
-    help: 'Dry run.'
+    group: 'Slack Reporter'
+  },
+  {
+    names: ['reporter-channel'],
+    type: 'string',
+    help: 'Post results of the script to this slack channel'
+  },
+  {
+    names: ['reporter-token'],
+    type: 'string',
+    help: 'Post to --reporter-channel using this token'
   }
 ]
 
