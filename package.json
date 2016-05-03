@@ -2,7 +2,7 @@
   "name": "slacksync",
   "version": "1.0.0",
   "description": "Scripts to sync its-all to the sfuits Slack",
-  "main": "index.js",
+  "main": "node/slacksync.js",
   "scripts": {
     "build": "babel src --out-dir node",
     "test": "ava -v"
