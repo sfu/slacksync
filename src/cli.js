@@ -36,6 +36,16 @@ const requiredArgMissing =  !opts.maillist ||
                             !opts.art_token ||
                             !opts.slack_token
 
+
+
+
+
+
+if (opts.version) {
+  console.log(`v${require('../package.json').version}`)
+  process.exit(0)
+}
+
 if (opts.help) {
   printUsageAndExit(0)
 }
@@ -43,11 +53,6 @@ if (opts.help) {
 if (requiredArgMissing) {
   console.log('Required option missing')
   printUsageAndExit(1)
-}
-
-if (opts.version) {
-  console.log(`v${require('../package.json').version}`)
-  process.exit(0)
 }
 
 slacksync(opts)
