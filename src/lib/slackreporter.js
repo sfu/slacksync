@@ -13,7 +13,6 @@ const waswere = (int, dryrun) => {
 
 export default class SlackReporter {
   constructor(channel, token, report) {
-    // console.log({channel, token})
     this.channel = channel
     this.token = token
     this.report = report
@@ -38,8 +37,10 @@ export default class SlackReporter {
     })
   }
 
+
   formatMessage() {
     const {DRY_RUN, created, removed, reactivated, maillistsUsed, date} = this.report
+    let {error} = this.report
     const dryrun = DRY_RUN ? `*:rotating_light: The script was run in \`dry-run\` mode. No changes were propagated to Slack. :rotating_light:*` : ''
     let message = {
       text: dedent`\`slacksync\` report for ${moment(date).format('MMMM Do, YYYY')} at ${moment(date).format('HH:mm')}
@@ -143,6 +144,21 @@ export default class SlackReporter {
             short: true
           }
         ]
+      })
+    }
+
+    if (error) {
+      if (!(error instanceof Error)) {
+        error = error.data ? new Error(JSON.stringify({
+          url: `${error.config.method.toUpperCase()} ${error.config.url}`,
+          data: error.config.data,
+          error: error.data
+        })) : new Error(error)
+      }
+      message.attachments.push({
+        title: `An error occurred while processing the script:`,
+        color: 'danger',
+        text: `${error.message}`
       })
     }
 

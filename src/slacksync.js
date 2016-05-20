@@ -7,6 +7,17 @@ import {IGNORE_USERS} from './lib/constants'
 import SlackReporter from './lib/slackreporter'
 
 export default async function slacksync(opts) {
+  let results = {
+    date: new Date(),
+    created: null,
+    removed: null,
+    reactivated: null,
+    maillistsUsed: opts.maillist
+  }
+  if (opts.dry_run) {
+    results.DRY_RUN = true
+  }
+
   try {
     const allSlackUsers = await slack.getUserList(opts.slack_token)
     const activeSlackUsers = allSlackUsers.members.filter(u => {
@@ -48,16 +59,7 @@ export default async function slacksync(opts) {
     // (https://twitter.com/alex_gibson/status/554745380005765120)
     const maillistMembersAddresses = [...new Set(maillistMembers)]
 
-    let results = {
-      date: new Date(),
-      created: null,
-      removed: null,
-      reactivated: null,
-      maillistsUsed: Object.keys(maillists).map(m => maillists[m].name)
-    }
-    if (opts.dry_run) {
-      results.DRY_RUN = true
-    }
+    results.maillistsUsed = Object.keys(maillists).map(m => maillists[m].name)
 
     const usersToRemoveFromSlack = activeSlackUsers.filter(u => !maillistMembersAddresses.includes(u.profile.email))
     if (usersToRemoveFromSlack.length > 0 && opts.remove_users) {
@@ -86,8 +88,24 @@ export default async function slacksync(opts) {
     }
 
   } catch(e) {
-    console.error(e.message)
-    console.error(e.stack)
+    if (e instanceof Error) {
+      console.error(e.message)
+      console.error(e.stack)
+    } else {
+      console.log(e)
+    }
+    if ((opts.reporter_token && opts.reporter_channel)) {
+      results.error = e
+      console.log(results)
+
+      const reporter = new SlackReporter(opts.reporter_channel, opts.reporter_token, results)
+      try {
+        await reporter.post()
+      } catch(slackError) {
+        console.log('***** ERROR POSTING TO SLACK')
+        console.error(slackError.stack)
+      }
+    }
   }
 }
 
@@ -143,7 +161,3 @@ async function createUsersInSlack(users, opts) {
 
   return responses
 }
-
-process.on('unhandledRejection', function(reason, p){
-  console.error("Possibly Unhandled Rejection at: Promise ", p, " reason: ", reason)
-})
