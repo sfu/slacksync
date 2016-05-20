@@ -24,6 +24,7 @@ export default async function slacksync(opts) {
       return !u.deleted &&
              !u.is_bot &&
              !IGNORE_USERS.includes(u.id) &&
+             !IGNORE_USERS.includes(u.profile.email.split('@')[0]) &&
              !u.is_restricted &&
              !u.is_ultra_restricted
     })
@@ -66,12 +67,19 @@ export default async function slacksync(opts) {
       results.removed = await toggleUsersInSlack(usersToRemoveFromSlack, false, opts)
     }
 
-    const usersToReactivate = deletedSlackUsers.filter(u => maillistMembersAddresses.includes(u.profile.email))
+    const usersToReactivate = deletedSlackUsers.filter(u =>
+      maillistMembersAddresses.includes(u.profile.email) &&
+      !IGNORE_USERS.includes(u.profile.email.split('@')[0])
+    )
     if (usersToReactivate.length > 0 && opts.reactivate_users) {
       results.reactivated = await toggleUsersInSlack(usersToReactivate, true, opts)
     }
 
-    const usersToCreate = maillistMembersAddresses.filter(u => !activeSlackUsersEmails.includes(u))
+    const usersToCreate = maillistMembersAddresses.filter(
+      u => !(activeSlackUsersEmails.includes(u)) &&
+           !(usersToReactivate.map(u => u.profile.email).includes(u)) &&
+           !IGNORE_USERS.includes(u.split('@')[0])
+      )
     if (usersToCreate.length > 0 && opts.create_users) {
       results.created = await createUsersInSlack(usersToCreate, opts)
     }
