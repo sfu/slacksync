@@ -23,7 +23,7 @@ const options = [
   {
     names: ['ignore-user'],
     type: 'arrayOfString',
-    helpArg: 'computingId | slackId',
+    helpArg: 'computingId',
     help: 'A SFU Computing ID to merge into the built-in ignore list'
   },
   {
