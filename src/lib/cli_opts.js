@@ -21,6 +21,12 @@ const options = [
     help: 'REQUIRED Numeric ID of the source maillist. May be repeated.'
   },
   {
+    names: ['ignore-user'],
+    type: 'arrayOfString',
+    helpArg: 'computingId | slackId',
+    help: 'A SFU Computing ID to merge into the built-in ignore list'
+  },
+  {
     group: 'Authentication Tokens'
   },
   {
