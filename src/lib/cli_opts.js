@@ -17,14 +17,15 @@ const options = [
   {
     names: ['maillist'],
     type: 'arrayOfString',
-    helpArg: '12345',
+    helpArg: 'LIST_ID',
     help: 'REQUIRED Numeric ID of the source maillist. May be repeated.'
   },
   {
-    names: ['ignore-user'],
-    type: 'arrayOfString',
-    helpArg: 'computingId',
-    help: 'A SFU Computing ID to merge into the built-in ignore list'
+    names: ['exclude-maillist'],
+    type: 'string',
+    env: 'SLACKSYNC_EXCLUDE_MAILLIST',
+    helpArg: 'LIST_ID',
+    help: 'A maillist containing users who should not be added to Slack'
   },
   {
     group: 'Authentication Tokens'
