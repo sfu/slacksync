@@ -1,6 +1,6 @@
 {
   "name": "slacksync",
-  "version": "1.0.6",
+  "version": "1.0.7",
   "description": "Sync SFU Maillists with a Slack team",
   "main": "./dist/slacksync",
   "scripts": {
