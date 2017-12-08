@@ -1,5 +1,4 @@
 #!/usr/bin/env node
-/* eslint no-console: 0 */
 
 import dashdash from 'dashdash';
 import options from './lib/cli_opts';
