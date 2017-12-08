@@ -1,15 +1,15 @@
 {
   "presets": [
-    "es2015",
-    "stage-1"
+    [
+      "env",
+      {
+        "targets": {
+          "node": "current"
+        },
+        "shippedProposals": true,
+        "useBuiltIns": "usage"
+      }
+    ]
   ],
-  "plugins": [
-    "add-module-exports",
-    "array-includes",
-    "dedent",
-    ["transform-runtime", {
-      "polyfill": false,
-      "regenerator": true
-    }]
-  ]
+  "plugins": ["add-module-exports", "dedent", "syntax-object-rest-spread"]
 }
