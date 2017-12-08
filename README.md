@@ -4,8 +4,16 @@ Sync SFU Maillists with a Slack team.
 
 ## Install :package:
 
+With `npm`:
+
 ```
-npm i slacksync
+npm -g i slacksync
+```
+
+Or, with `yarn`:
+
+```
+yarn global add slacksync
 ```
 
 ## Usage 🚀
