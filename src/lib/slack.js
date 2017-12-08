@@ -1,5 +1,5 @@
-import axios from 'axios'
-import {SLACK_REST_BASE, SLACK_SCIM_BASE} from './constants'
+import axios from 'axios';
+import { SLACK_REST_BASE, SLACK_SCIM_BASE } from './constants';
 
 export function getUserList(token) {
   return new Promise((resolve, reject) => {
@@ -9,16 +9,18 @@ export function getUserList(token) {
       params: {
         token
       }
-    }).then((response) => {
-      if (response.status === 200) {
-        resolve(response.data)
-      } else {
-        reject(response)
-      }
-    }).catch((response) => {
-      reject(response)
     })
-  })
+      .then(response => {
+        if (response.status === 200) {
+          resolve(response.data);
+        } else {
+          reject(response);
+        }
+      })
+      .catch(response => {
+        reject(response);
+      });
+  });
 }
 
 export function toggleUserActive(id, state, token) {
@@ -32,16 +34,18 @@ export function toggleUserActive(id, state, token) {
       data: {
         active: state
       }
-    }).then((response) => {
-      if (response.status === 200) {
-        resolve(response.data)
-      } else {
-        reject(response)
-      }
-    }).catch((response) => {
-      reject(response)
     })
-  })
+      .then(response => {
+        if (response.status === 200) {
+          resolve(response.data);
+        } else {
+          reject(response);
+        }
+      })
+      .catch(response => {
+        reject(response);
+      });
+  });
 }
 
 export function createUser(user, token) {
@@ -53,19 +57,19 @@ export function createUser(user, token) {
         Authorization: `Bearer ${token}`
       },
       data: {
-        schemas: [
-          'urn:scim:schemas:core:1.0'
-        ],
+        schemas: ['urn:scim:schemas:core:1.0'],
         ...user
       }
-    }).then((response) => {
-      if (response.status === 201) {
-        resolve(response.data)
-      } else {
-        reject(response)
-      }
-    }).catch((response) => {
-      reject(response)
     })
-  })
+      .then(response => {
+        if (response.status === 201) {
+          resolve(response.data);
+        } else {
+          reject(response);
+        }
+      })
+      .catch(response => {
+        reject(response);
+      });
+  });
 }

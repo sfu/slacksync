@@ -57,7 +57,8 @@ const options = [
   {
     names: ['all', 'a'],
     type: 'bool',
-    help: 'DEFAULT Run all operations (create, reactivate, delete). Same as -cdr'
+    help:
+      'DEFAULT Run all operations (create, reactivate, delete). Same as -cdr'
   },
   {
     names: ['create-users', 'c'],
@@ -87,6 +88,6 @@ const options = [
     type: 'string',
     help: 'Post to --reporter-channel using this token'
   }
-]
+];
 
-export default options
+export default options;

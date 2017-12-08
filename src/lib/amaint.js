@@ -1,5 +1,5 @@
-import axios from 'axios'
-import {AOBREST_BASE} from './constants'
+import axios from 'axios';
+import { AOBREST_BASE } from './constants';
 
 export function getUserBio(username, token) {
   return new Promise((resolve, reject) => {
@@ -10,14 +10,16 @@ export function getUserBio(username, token) {
         username,
         art: token
       }
-    }).then((response) => {
-      if (response.status === 200) {
-        resolve(response.data)
-      } else {
-        reject(response)
-      }
-    }).catch((response) => {
-      reject(response)
     })
-  })
+      .then(response => {
+        if (response.status === 200) {
+          resolve(response.data);
+        } else {
+          reject(response);
+        }
+      })
+      .catch(response => {
+        reject(response);
+      });
+  });
 }
