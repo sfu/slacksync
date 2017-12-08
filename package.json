@@ -27,6 +27,9 @@
     "require": ["babel-register"],
     "babel": "inherit"
   },
+  "prettier": {
+    "singleQuote": true
+  },
   "homepage": "https://github.com/sfu/slacksync#readme",
   "devDependencies": {
     "ava": "0.24.0",
