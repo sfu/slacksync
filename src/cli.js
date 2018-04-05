@@ -3,6 +3,7 @@
 const dashdash = require('dashdash');
 const options = require('./lib/cli_opts');
 const slacksync = require('./slacksync');
+const dedent = require('dedent-js');
 
 const parser = dashdash.createParser({ options: options });
 let opts;
@@ -14,7 +15,6 @@ try {
 }
 
 function printUsageAndExit(exitCode = 0) {
-  /* global dedent */
   const help = parser.help({ includeEnv: true, helpWrap: false });
   const helpstr = dedent`usage: slacksync [OPTIONS]
                          options:

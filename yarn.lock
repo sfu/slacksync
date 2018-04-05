@@ -564,10 +564,6 @@ babel-plugin-check-es2015-constants@^6.22.0, babel-plugin-check-es2015-constants
   dependencies:
     babel-runtime "^6.22.0"
 
-babel-plugin-dedent@2.0.0:
-  version "2.0.0"
-  resolved "https://registry.yarnpkg.com/babel-plugin-dedent/-/babel-plugin-dedent-2.0.0.tgz#327acf69b6b47a964cefcca8e703650df61322dd"
-
 babel-plugin-espower@^2.3.2:
   version "2.3.2"
   resolved "https://registry.yarnpkg.com/babel-plugin-espower/-/babel-plugin-espower-2.3.2.tgz#5516b8fcdb26c9f0e1d8160749f6e4c65e71271e"
@@ -1305,6 +1301,10 @@ debug@^3.0.1, debug@^3.1.0:
 decamelize@^1.1.2:
   version "1.2.0"
   resolved "https://registry.yarnpkg.com/decamelize/-/decamelize-1.2.0.tgz#f6534d15148269b20352e7bee26f501f9a191290"
+
+dedent-js@1.0.1:
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/dedent-js/-/dedent-js-1.0.1.tgz#bee5fb7c9e727d85dffa24590d10ec1ab1255305"
 
 deep-equal@^1.0.0:
   version "1.0.1"

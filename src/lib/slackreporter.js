@@ -1,5 +1,4 @@
-/* global dedent */
-
+const dedent = require('dedent-js');
 const moment = require('moment');
 const pluralize = require('pluralize');
 const postMessage = require('slack/methods/chat.postMessage');

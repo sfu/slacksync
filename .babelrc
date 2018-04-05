@@ -11,5 +11,5 @@
       }
     ]
   ],
-  "plugins": ["add-module-exports", "dedent", "syntax-object-rest-spread"]
+  "plugins": ["add-module-exports", "syntax-object-rest-spread"]
 }

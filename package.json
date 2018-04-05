@@ -40,7 +40,6 @@
     "babel-core": "6.26.0",
     "babel-eslint": "8.0.3",
     "babel-plugin-add-module-exports": "0.2.1",
-    "babel-plugin-dedent": "2.0.0",
     "babel-plugin-syntax-object-rest-spread": "6.13.0",
     "babel-preset-env": "1.6.1",
     "babel-register": "6.26.0",
@@ -52,6 +51,7 @@
     "axios": "0.17.1",
     "babel-runtime": "6.26.0",
     "dashdash": "1.14.1",
+    "dedent-js": "1.0.1",
     "moment": "2.19.3",
     "pluralize": "7.0.0",
     "slack": "6.1.0"
