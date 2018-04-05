@@ -1,10 +1,10 @@
-import axios from 'axios';
-import { MLREST_BASE } from './constants';
+const axios = require('axios');
+const { MLREST_BASE } = require('./constants');
 
 // workaround for MLREST's borked SSL cert
 process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0';
 
-export function getMaillist(list, token) {
+function getMaillist(list, token) {
   return new Promise((resolve, reject) => {
     axios({
       method: 'get',
@@ -23,7 +23,7 @@ export function getMaillist(list, token) {
   });
 }
 
-export function getMaillistMembers(list, token) {
+function getMaillistMembers(list, token) {
   return new Promise((resolve, reject) => {
     axios({
       method: 'get',
@@ -41,3 +41,5 @@ export function getMaillistMembers(list, token) {
       });
   });
 }
+
+module.exports = { getMaillist, getMaillistMembers };

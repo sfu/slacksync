@@ -5,7 +5,7 @@ const SLACK_REST_BASE = 'https://slack.com/api';
 const SLACK_SCIM_BASE = 'https://api.slack.com/scim/v1';
 const IGNORE_USERS = ['USLACKBOT', 'itsslack'];
 
-export {
+module.exports = {
   AOBREST_BASE,
   MLREST_BASE,
   SLACK_REST_BASE,

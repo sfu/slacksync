@@ -99,7 +99,7 @@ You can use `slacksync` programmatically in another program by installing it wit
 npm i --save slacksync
 
 // in your project
-import slacksync from 'slacksync'
+const slacksync = require('slacksync');
 
 slacksync({
   slack_token: 'xxxx',
@@ -108,5 +108,5 @@ slacksync({
   maillist: [12345, 98765],
   all: true,
   dry_run: true
-})
+});
 ```

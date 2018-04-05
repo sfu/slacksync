@@ -1,8 +1,8 @@
 /* global dedent */
 
-import moment from 'moment';
-import pluralize from 'pluralize';
-import postMessage from 'slack/methods/chat.postMessage';
+const moment = require('moment');
+const pluralize = require('pluralize');
+const postMessage = require('slack/methods/chat.postMessage');
 
 const waswere = (int, dryrun) => {
   if (dryrun) {
@@ -11,7 +11,7 @@ const waswere = (int, dryrun) => {
   return int === 1 ? 'was' : 'were';
 };
 
-export default class SlackReporter {
+module.exports = class SlackReporter {
   constructor(channel, token, report) {
     this.channel = channel;
     this.token = token;
@@ -203,4 +203,4 @@ export default class SlackReporter {
 
     return message;
   }
-}
+};

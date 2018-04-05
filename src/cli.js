@@ -1,8 +1,8 @@
 #!/usr/bin/env node
 
-import dashdash from 'dashdash';
-import options from './lib/cli_opts';
-import slacksync from './slacksync';
+const dashdash = require('dashdash');
+const options = require('./lib/cli_opts');
+const slacksync = require('./slacksync');
 
 const parser = dashdash.createParser({ options: options });
 let opts;

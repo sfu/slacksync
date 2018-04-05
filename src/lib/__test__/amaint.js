@@ -1,5 +1,5 @@
-import test from 'ava';
-import { getUserBio } from '../amaint';
+const test = require('ava');
+const { getUserBio } = require('../amaint');
 
 test('get bio for a valid user should succeed', async t => {
   const response = await getUserBio('kipling', process.env.ART_TOKEN);

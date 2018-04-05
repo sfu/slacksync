@@ -1,7 +1,7 @@
-import axios from 'axios';
-import { SLACK_REST_BASE, SLACK_SCIM_BASE } from './constants';
+const axios = require('axios');
+const { SLACK_REST_BASE, SLACK_SCIM_BASE } = require('./constants');
 
-export function getUserList(token) {
+function getUserList(token) {
   return new Promise((resolve, reject) => {
     axios({
       method: 'get',
@@ -23,7 +23,7 @@ export function getUserList(token) {
   });
 }
 
-export function toggleUserActive(id, state, token) {
+function toggleUserActive(id, state, token) {
   return new Promise((resolve, reject) => {
     axios({
       method: 'patch',
@@ -48,7 +48,7 @@ export function toggleUserActive(id, state, token) {
   });
 }
 
-export function createUser(user, token) {
+function createUser(user, token) {
   return new Promise((resolve, reject) => {
     axios({
       method: 'post',
@@ -73,3 +73,9 @@ export function createUser(user, token) {
       });
   });
 }
+
+module.exports = {
+  getUserList,
+  toggleUserActive,
+  createUser
+};

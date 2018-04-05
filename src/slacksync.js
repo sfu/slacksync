@@ -1,12 +1,12 @@
 /* eslint no-console: 0 */
 
-import { getUserBio } from './lib/amaint';
-import { getMaillist, getMaillistMembers } from './lib/maillist';
-import * as slack from './lib/slack';
-import { IGNORE_USERS } from './lib/constants';
-import SlackReporter from './lib/slackreporter';
+const { getUserBio } = require('./lib/amaint');
+const { getMaillist, getMaillistMembers } = require('./lib/maillist');
+const slack = require('./lib/slack');
+const { IGNORE_USERS } = require('./lib/constants');
+const SlackReporter = require('./lib/slackreporter');
 
-export default async function slacksync(opts) {
+async function slacksync(opts) {
   let results = {
     date: new Date(),
     created: null,
@@ -221,3 +221,5 @@ async function createUsersInSlack(users, opts) {
 
   return responses;
 }
+
+module.exports = slacksync;

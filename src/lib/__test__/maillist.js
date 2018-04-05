@@ -1,5 +1,5 @@
-import test from 'ava';
-import { getMaillist, getMaillistMembers } from '../maillist';
+const test = require('ava');
+const { getMaillist, getMaillistMembers } = require('../maillist');
 
 const { ML_TOKEN } = process.env;
 

@@ -1,5 +1,5 @@
-import test from 'ava';
-import * as slack from '../slack';
+const test = require('ava');
+const slack = require('../slack');
 const { SLACK_TOKEN } = process.env;
 
 test.skip.after(async () => {
