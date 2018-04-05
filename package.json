@@ -7,7 +7,7 @@
     "build": "rm -rf dist && babel src --ignore src/lib/__test__ --out-dir dist",
     "test": "ava -v",
     "lint": "eslint src",
-    "prepublishOnly": "npm run lint && npm run build"
+    "prepublishOnly": "npm run lint"
   },
   "bin": {
     "slacksync": "src/cli.js"
