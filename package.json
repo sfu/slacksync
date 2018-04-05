@@ -36,20 +36,13 @@
   "homepage": "https://github.com/sfu/slacksync#readme",
   "devDependencies": {
     "ava": "0.24.0",
-    "babel-cli": "6.26.0",
-    "babel-core": "6.26.0",
     "babel-eslint": "8.0.3",
-    "babel-plugin-add-module-exports": "0.2.1",
-    "babel-plugin-syntax-object-rest-spread": "6.13.0",
-    "babel-preset-env": "1.6.1",
-    "babel-register": "6.26.0",
     "eslint": "4.12.1",
     "eslint-config-unobtrusive": "1.2.0",
     "prettier": "1.9.1"
   },
   "dependencies": {
     "axios": "0.17.1",
-    "babel-runtime": "6.26.0",
     "dashdash": "1.14.1",
     "dedent-js": "1.0.1",
     "moment": "2.19.3",
