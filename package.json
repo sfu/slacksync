@@ -35,10 +35,9 @@
   },
   "homepage": "https://github.com/sfu/slacksync#readme",
   "devDependencies": {
-    "ava": "0.24.0",
-    "babel-eslint": "8.0.3",
-    "eslint": "4.12.1",
-    "eslint-config-unobtrusive": "1.2.0",
+    "ava": "0.25.0",
+    "eslint": "4.19.1",
+    "eslint-config-unobtrusive": "1.2.2",
     "prettier": "1.9.1"
   },
   "dependencies": {
