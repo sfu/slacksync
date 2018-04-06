@@ -4,7 +4,7 @@ const { getUserBio } = require('./lib/amaint');
 const { getMaillist, getMaillistMembers } = require('./lib/maillist');
 const slack = require('./lib/slack');
 const { IGNORE_USERS } = require('./lib/constants');
-const SlackReporter = require('./lib/slackreporter');
+const { SlackReporter } = require('./lib/slackreporter');
 
 async function slacksync(opts) {
   let results = {
