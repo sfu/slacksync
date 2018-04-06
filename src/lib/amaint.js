@@ -1,7 +1,7 @@
 const axios = require('axios');
 const { AOBREST_BASE } = require('./constants');
 
-module.exports = function getUserBio(username, token) {
+function getUserBio(username, token) {
   return new Promise((resolve, reject) => {
     axios({
       method: 'get',
@@ -22,4 +22,6 @@ module.exports = function getUserBio(username, token) {
         reject(response);
       });
   });
-};
+}
+
+module.exports = { getUserBio };
