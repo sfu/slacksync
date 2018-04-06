@@ -1,7 +1,6 @@
 const axios = require('axios');
 const request = require('request-promise-native');
 const puppeteer = require('puppeteer');
-const { getUserBio } = require('./amaint');
 
 const {
   SLACK_REST_BASE,
