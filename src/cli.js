@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 
 const dashdash = require('dashdash');
-const options = require('./lib/cli_opts');
+const { slacksyncOptions: options } = require('./lib/cli_opts');
 const slacksync = require('./slacksync');
 const dedent = require('dedent-js');
 
