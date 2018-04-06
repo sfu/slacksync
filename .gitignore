@@ -35,4 +35,4 @@ node_modules
 # Compiled output
 dist
 
-slacksync.sh
+slacksync*.sh
