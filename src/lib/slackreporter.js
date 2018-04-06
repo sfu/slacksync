@@ -255,7 +255,6 @@ class SlackGuestReporter {
                      'Maillist',
                      maillistsUsed.length
                    )} used: ${maillistsUsed.map(m => `\`${m}\``).join(', ')}
-                   Invited to channel: <#${invitedTo}>
                    ${dryrun}
                   `,
       attachments: []
@@ -266,7 +265,7 @@ class SlackGuestReporter {
         title: `${pluralize('user', invited.length, true)} ${waswere(
           invited.length,
           DRY_RUN
-        )} invited:`,
+        )} invited to channel <#${invitedTo}>:`,
         color: '#36a64f',
         fields: [
           {
@@ -285,7 +284,7 @@ class SlackGuestReporter {
       });
     }
 
-    if (warnings) {
+    if (warnings && warnings.length) {
       message.attachments.push({
         title: `${pluralize('warnings', warnings.length, true)} ${waswere(
           warnings.length,
