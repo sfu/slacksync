@@ -46,6 +46,9 @@
     "dedent-js": "1.0.1",
     "moment": "2.22.0",
     "pluralize": "7.0.0",
+    "puppeteer": "1.2.0",
+    "request": "2.85.0",
+    "request-promise-native": "1.0.5",
     "slack": "6.1.0"
   }
 }
