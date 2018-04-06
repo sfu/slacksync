@@ -1,6 +1,6 @@
 {
   "name": "slacksync",
-  "version": "1.3.0",
+  "version": "2.0.0",
   "description": "Sync SFU Maillists with a Slack team",
   "main": "./dist/slacksync",
   "scripts": {
@@ -10,7 +10,8 @@
     "prepublishOnly": "npm run lint"
   },
   "bin": {
-    "slacksync": "src/cli.js"
+    "slacksync": "src/cli.js",
+    "slacksync-guest": "src/cli-guest.js"
   },
   "repository": {
     "type": "git",
@@ -46,6 +47,9 @@
     "dedent-js": "1.0.1",
     "moment": "2.22.0",
     "pluralize": "7.0.0",
+    "puppeteer": "1.2.0",
+    "request": "2.85.0",
+    "request-promise-native": "1.0.5",
     "slack": "6.1.0"
   }
 }

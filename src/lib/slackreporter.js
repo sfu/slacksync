@@ -2,6 +2,7 @@ const dedent = require('dedent-js');
 const moment = require('moment');
 const pluralize = require('pluralize');
 const postMessage = require('slack/methods/chat.postMessage');
+const { SLACK_INVITE_ERRORS } = require('./constants');
 
 const waswere = (int, dryrun) => {
   if (dryrun) {
@@ -10,7 +11,7 @@ const waswere = (int, dryrun) => {
   return int === 1 ? 'was' : 'were';
 };
 
-module.exports = class SlackReporter {
+class SlackReporter {
   constructor(channel, token, report) {
     this.channel = channel;
     this.token = token;
@@ -202,4 +203,137 @@ module.exports = class SlackReporter {
 
     return message;
   }
+}
+
+class SlackGuestReporter {
+  constructor(channel, token, report) {
+    this.channel = channel;
+    this.token = token;
+    this.report = report;
+  }
+
+  async post() {
+    return new Promise(async (resolve, reject) => {
+      const { text, attachments } = this.formatMessage();
+      postMessage(
+        {
+          token: this.token,
+          channel: this.channel,
+          text,
+          attachments: JSON.stringify(attachments),
+          as_user: true
+        },
+        (err, data) => {
+          if (err) {
+            reject(err);
+          } else {
+            resolve(data);
+          }
+        }
+      );
+    });
+  }
+
+  formatMessage() {
+    const {
+      DRY_RUN,
+      invited,
+      warnings,
+      maillistsUsed,
+      date,
+      invitedTo
+    } = this.report;
+    let { error } = this.report;
+    const dryrun = DRY_RUN
+      ? `*:rotating_light: The script was run in \`dry-run\` mode. No changes were propagated to Slack. :rotating_light:*`
+      : '';
+    let message = {
+      text: dedent`\`slacksync-guest\` report for ${moment(date).format(
+        'MMMM Do, YYYY'
+      )} at ${moment(date).format('HH:mm')}
+                   ${pluralize(
+                     'Maillist',
+                     maillistsUsed.length
+                   )} used: ${maillistsUsed.map(m => `\`${m}\``).join(', ')}
+                   ${dryrun}
+                  `,
+      attachments: []
+    };
+
+    if (invited && invited.length) {
+      message.attachments.push({
+        title: `${pluralize('user', invited.length, true)} ${waswere(
+          invited.length,
+          DRY_RUN
+        )} invited to channel <#${invitedTo}>:`,
+        color: '#36a64f',
+        fields: [
+          {
+            title: 'Email Address',
+            value: invited.map(u => u.email).join('\n'),
+            short: true
+          },
+          {
+            title: 'Name',
+            value: invited
+              .map(u => (u.full_name ? u.full_name : '_no name provided_'))
+              .join('\n'),
+            short: true
+          }
+        ]
+      });
+    }
+
+    if (warnings && warnings.length) {
+      message.attachments.push({
+        title: `${pluralize('warnings', warnings.length, true)} ${waswere(
+          warnings.length,
+          DRY_RUN
+        )} received:`,
+        color: 'warning',
+        fields: [
+          {
+            title: '',
+            value: warnings
+              .map(
+                ({ email, error }) =>
+                  `${email}: ${
+                    SLACK_INVITE_ERRORS.hasOwnProperty(error)
+                      ? SLACK_INVITE_ERRORS[error]
+                      : error
+                  }`
+              )
+              .join('\n'),
+            short: false
+          }
+        ]
+      });
+    }
+
+    if (error) {
+      if (!(error instanceof Error)) {
+        error = error.data
+          ? new Error(
+              JSON.stringify({
+                url: `${error.config.method.toUpperCase()} ${error.config.url}`,
+                data: error.config.data,
+                error: error.data
+              })
+            )
+          : new Error(error);
+      }
+      message.attachments.push({
+        title: `An error occurred while processing the script:`,
+        color: 'danger',
+        text: `${error.message}`
+      });
+    }
+
+    return message;
+  }
+}
+
+module.exports = {
+  SlackReporter,
+  SlackGuestReporter
 };

@@ -1,8 +1,8 @@
 #!/usr/bin/env node
 
 const dashdash = require('dashdash');
-const { slacksyncOptions: options } = require('./lib/cli_opts');
-const slacksync = require('./slacksync');
+const { slacksyncGuestOptions: options } = require('./lib/cli_opts');
+const slacksync = require('./slacksync-guest');
 const dedent = require('dedent-js');
 
 const parser = dashdash.createParser({ options: options });
@@ -10,13 +10,13 @@ let opts;
 try {
   opts = parser.parse(process.argv);
 } catch (e) {
-  console.error('slacksync: error: %s', e.message);
+  console.error('slacksync-guest: error: %s', e.message);
   process.exit(1);
 }
 
 function printUsageAndExit(exitCode = 0) {
   const help = parser.help({ includeEnv: true, helpWrap: false });
-  const helpstr = dedent`usage: slacksync [OPTIONS]
+  const helpstr = dedent`usage: slacksync-guest [OPTIONS]
                          options:
                          ${help}
   `;
@@ -24,17 +24,14 @@ function printUsageAndExit(exitCode = 0) {
   process.exit(exitCode);
 }
 
-if (opts.all) {
-  opts.create_users = true;
-  opts.remove_users = true;
-  opts.reactivate_users = true;
-}
-
 const requiredArgMissing =
   !opts.maillist ||
   !opts.maillist_token ||
   !opts.art_token ||
-  !opts.slack_token;
+  !opts.slack_token ||
+  !opts.slack_admin_user ||
+  !opts.slack_admin_password ||
+  !opts.invite_channel;
 
 if (opts.version) {
   console.log(`v${require('../package.json').version}`);
