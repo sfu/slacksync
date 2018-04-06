@@ -182,3 +182,5 @@ const slacksyncGuest = async opts => {
     }
   }
 };
+
+module.exports = slacksyncGuest;
