@@ -165,16 +165,22 @@ const getPendingInvitations = async (username, password) => {
   }
 };
 
-const generateInviteDataForUser = (u, channel, token, message) => {
+const generateInviteDataForUser = (u, channels, token, message) => {
   const data = {
     ...u,
     token,
-    channels: channel,
+    channels: channels.join(','),
     source: 'invite_modal',
     mode: 'manual',
-    ultra_restricted: '1',
     set_active: 'true'
   };
+
+  if (channels.length === 1) {
+    data['ultra_restricted'] = '1';
+  } else {
+    data['restricted'] = '1';
+  }
+
   if (message) {
     data.extra_message = message;
   }

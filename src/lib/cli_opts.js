@@ -121,10 +121,11 @@ const slacksyncGuestOptions = [
   { group: 'Slack Single-Channel Guest Options' },
   {
     names: ['invite-channel'],
-    type: 'string',
+    type: 'arrayOfString',
     env: 'SLACKSYNC_GUEST_INVITE_CHANNEL',
     helpArg: 'CXXXXXXXX',
-    help: 'REQUIRED Slack ID of the channel to invite new users to join'
+    help:
+      'REQUIRED Slack ID of the channel to invite new users to join. May be repeated.'
   },
   {
     names: ['invite-message'],
