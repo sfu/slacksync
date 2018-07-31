@@ -261,11 +261,16 @@ class SlackGuestReporter {
     };
 
     if (invited && invited.length) {
+      const channelList = invitedTo.map(i => `<#${i}>`).join('\n');
       message.attachments.push({
         title: `${pluralize('user', invited.length, true)} ${waswere(
           invited.length,
           DRY_RUN
-        )} invited to channel <#${invitedTo}>:`,
+        )} invited to ${pluralize(
+          'channel',
+          invitedTo.length,
+          true
+        )}:\n${channelList}`,
         color: '#36a64f',
         fields: [
           {
