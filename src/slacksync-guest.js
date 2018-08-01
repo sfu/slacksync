@@ -108,6 +108,10 @@ const slacksyncGuest = async opts => {
       })
     );
 
+    let singleChannelGuestsToPromote = activeSlackUsers.filter(
+      u => u.is_ultra_restricted && maillistMembers.includes(u.profile.email)
+    );
+
     // get tokens so we can generate and send invitations
     const tokens = await slack.getSlackTokens(
       opts.slack_admin_user,
@@ -126,25 +130,56 @@ const slacksyncGuest = async opts => {
     const invitationRequests = invitations.map(i =>
       slack.generateInvitationRequest(i, tokens)
     );
-    let responses = (await Promise.all(invitationRequests)).map((result, i) => {
-      return {
-        ...JSON.parse(result),
-        email: invitations[i].email,
-        name: invitations[i].hasOwnProperty('full_name')
-          ? invitations[i].full_name
-          : null
-      };
-    });
 
-    results.invited = responses.filter(r => r.ok);
-    results.warnings = responses.filter(r => !r.ok && r.error);
+    const promotionRequestData = singleChannelGuestsToPromote.map(u =>
+      slack.generatePromotionRequestDataForUser(
+        u,
+        opts.invite_channel,
+        tokens.apiToken
+      )
+    );
 
+    const promotionRequests = promotionRequestData.map(i =>
+      slack.convertSingleChannelGuestToMultiChannel(i, tokens)
+    );
+
+    let invitationResponses = (await Promise.all(invitationRequests)).map(
+      (result, i) => {
+        return {
+          ...JSON.parse(result),
+          email: invitations[i].email,
+          name: invitations[i].hasOwnProperty('full_name')
+            ? invitations[i].full_name
+            : null
+        };
+      }
+    );
+
+    let promotionResponses = (await Promise.all(promotionRequests)).map(
+      (result, i) => {
+        return {
+          ...JSON.parse(result),
+          username: singleChannelGuestsToPromote[i].name,
+          name: singleChannelGuestsToPromote[i].real_name
+        };
+      }
+    );
+
+    results.invited = invitationResponses.filter(r => r.ok);
+    results.promoted = promotionResponses.filter(r => r.ok);
+    results.inviteWarnings = invitationResponses.filter(r => !r.ok && r.error);
+    results.promotionWarnings = promotionResponses.filter(
+      r => !r.ok && r.error
+    );
     console.log(results);
 
     if (
       opts.reporter_token &&
       opts.reporter_channel &&
-      (results.invited.length || results.warnings.length)
+      (results.invited.length ||
+        results.inviteWarnings.length ||
+        results.promoted.length ||
+        results.promotionWarnings.length)
     ) {
       const reporter = new SlackGuestReporter(
         opts.reporter_channel,

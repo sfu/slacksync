@@ -6,7 +6,8 @@ const {
   SLACK_REST_BASE,
   SLACK_SCIM_BASE,
   SLACK_ADMIN_URL,
-  SLACK_USER_INVITE_API
+  SLACK_USER_INVITE_API,
+  SLACK_USER_SET_RESTRICTED_API
 } = require('./constants');
 
 function getUserList(token) {
@@ -187,12 +188,37 @@ const generateInviteDataForUser = (u, channels, token, message) => {
   return data;
 };
 
+const generatePromotionRequestDataForUser = (u, channels, token) => ({
+  user: u.id,
+  channels: channels.join(','),
+  token
+});
+
 // this uses `request` instead of `axios` since the former
 // natively supports FormData, while the latter doesn't
 const generateInvitationRequest = (formData, { xId, slackApiTS, cookies }) =>
   request({
     method: 'POST',
     url: `${SLACK_USER_INVITE_API}?_x_id=${xId}`,
+    formData,
+    headers: {
+      accept: '*/*',
+      'cache-control': 'no-cache',
+      cookie: cookies.map(c => `${c.name}=${c.value}`).join('; '),
+      'x-slack-version-ts': slackApiTS,
+      origin: 'https://sfuits.slack.com',
+      'user-agent':
+        'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/65.0.3325.181 Safari/537.36'
+    }
+  });
+
+const convertSingleChannelGuestToMultiChannel = (
+  formData,
+  { xId, slackApiTS, cookies }
+) =>
+  request({
+    method: 'POST',
+    url: `${SLACK_USER_SET_RESTRICTED_API}?_x_id=${xId}`,
     formData,
     headers: {
       accept: '*/*',
@@ -212,5 +238,7 @@ module.exports = {
   getSlackTokens,
   getPendingInvitations,
   generateInviteDataForUser,
-  generateInvitationRequest
+  generatePromotionRequestDataForUser,
+  generateInvitationRequest,
+  convertSingleChannelGuestToMultiChannel
 };

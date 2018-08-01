@@ -238,7 +238,9 @@ class SlackGuestReporter {
     const {
       DRY_RUN,
       invited,
-      warnings,
+      inviteWarnings,
+      promoted,
+      promotionWarnings,
       maillistsUsed,
       date,
       invitedTo
@@ -289,17 +291,74 @@ class SlackGuestReporter {
       });
     }
 
-    if (warnings && warnings.length) {
+    if (inviteWarnings && inviteWarnings.length) {
       message.attachments.push({
-        title: `${pluralize('warnings', warnings.length, true)} ${waswere(
-          warnings.length,
+        title: `${pluralize('warnings', inviteWarnings.length, true)} ${waswere(
+          inviteWarnings.length,
           DRY_RUN
-        )} received:`,
+        )} received when inviting users:`,
         color: 'warning',
         fields: [
           {
             title: '',
-            value: warnings
+            value: inviteWarnings
+              .map(
+                ({ email, error }) =>
+                  `${email}: ${
+                    SLACK_INVITE_ERRORS.hasOwnProperty(error)
+                      ? SLACK_INVITE_ERRORS[error]
+                      : error
+                  }`
+              )
+              .join('\n'),
+            short: false
+          }
+        ]
+      });
+    }
+
+    if (promoted && promoted.length) {
+      const channelList = invitedTo.map(i => `<#${i}>`).join('\n');
+      message.attachments.push({
+        title: `${pluralize('user', promoted.length, true)} ${waswere(
+          promoted.length,
+          DRY_RUN
+        )} converted to multi-channel guest and added to ${pluralize(
+          'channel',
+          invitedTo.length,
+          true
+        )}:\n${channelList}`,
+        color: '#36a64f',
+        fields: [
+          {
+            title: 'Name',
+            value: promoted.map(u => u.name).join('\n'),
+            short: true
+          },
+          {
+            title: 'Username',
+            value: promoted.map(u => u.username).join('\n'),
+            short: true
+          }
+        ]
+      });
+    }
+
+    if (promotionWarnings && promotionWarnings.length) {
+      message.attachments.push({
+        title: `${pluralize(
+          'warnings',
+          promotionWarnings.length,
+          true
+        )} ${waswere(
+          promotionWarnings.length,
+          DRY_RUN
+        )} received when converting single-channel guests to multi-channel guests:`,
+        color: 'warning',
+        fields: [
+          {
+            title: '',
+            value: promotionWarnings
               .map(
                 ({ email, error }) =>
                   `${email}: ${

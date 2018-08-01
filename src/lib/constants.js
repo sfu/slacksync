@@ -5,6 +5,8 @@ const SLACK_REST_BASE = 'https://slack.com/api';
 const SLACK_SCIM_BASE = 'https://api.slack.com/scim/v1';
 const SLACK_ADMIN_URL = 'https://sfuits.slack.com/?redir=%2Fadmin';
 const SLACK_USER_INVITE_API = 'https://sfuits.slack.com/api/users.admin.invite';
+const SLACK_USER_SET_RESTRICTED_API =
+  'https://sfuits.slack.com/api/users.admin.setRestricted';
 const IGNORE_USERS = ['USLACKBOT', 'itsslack'];
 const SLACK_INVITE_ERRORS = {
   already_invited:
@@ -21,5 +23,6 @@ module.exports = {
   IGNORE_USERS,
   SLACK_ADMIN_URL,
   SLACK_USER_INVITE_API,
+  SLACK_USER_SET_RESTRICTED_API,
   SLACK_INVITE_ERRORS
 };
