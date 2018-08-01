@@ -231,6 +231,75 @@ const convertSingleChannelGuestToMultiChannel = (
     }
   });
 
+const getUserChannelIds = (user, token) =>
+  new Promise((resolve, reject) => {
+    axios({
+      method: 'get',
+      url: `${SLACK_REST_BASE}/users.conversations`,
+      params: {
+        token,
+        user,
+        exclude_archived: true,
+        limit: 1000,
+        types: 'public_channel'
+      }
+    })
+      .then(response => {
+        if (response.status === 200) {
+          const ids = response.data.channels.map(c => c.id);
+          resolve(ids);
+        } else {
+          reject(response);
+        }
+      })
+      .catch(response => {
+        reject(response);
+      });
+  });
+
+const inviteUserToChannels = async (data, token) => {
+  const { user, inviteTo } = data;
+  const promises = inviteTo.map(
+    (channel, i) =>
+      new Promise((resolve, reject) =>
+        axios({
+          method: 'post',
+          url: `${SLACK_REST_BASE}/channels.invite`,
+          headers: {
+            Authorization: `Bearer ${token}`
+          },
+          data: {
+            channel,
+            user: user.id
+          }
+        })
+          .then(response => {
+            if (response.status === 200) {
+              if (response.data.ok) {
+                resolve({
+                  user,
+                  ok: response.data.ok,
+                  channel: response.data.channel.id
+                });
+              } else {
+                resolve({
+                  user,
+                  ok: response.data.ok,
+                  error: response.data.error
+                });
+              }
+            } else {
+              reject(response);
+            }
+          })
+          .catch(response => {
+            reject(response);
+          })
+      )
+  );
+  return await Promise.all(promises);
+};
+
 module.exports = {
   getUserList,
   toggleUserActive,
@@ -240,5 +309,7 @@ module.exports = {
   generateInviteDataForUser,
   generatePromotionRequestDataForUser,
   generateInvitationRequest,
-  convertSingleChannelGuestToMultiChannel
+  convertSingleChannelGuestToMultiChannel,
+  getUserChannelIds,
+  inviteUserToChannels
 };

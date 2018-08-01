@@ -4,6 +4,8 @@ const pluralize = require('pluralize');
 const postMessage = require('slack/methods/chat.postMessage');
 const { SLACK_INVITE_ERRORS } = require('./constants');
 
+const GREEN = '#36a64f';
+
 const waswere = (int, dryrun) => {
   if (dryrun) {
     return 'would have been';
@@ -72,7 +74,7 @@ class SlackReporter {
           created.length,
           DRY_RUN
         )} added:`,
-        color: '#36a64f',
+        color: GREEN,
         fields: [
           {
             title: 'Name',
@@ -241,6 +243,7 @@ class SlackGuestReporter {
       inviteWarnings,
       promoted,
       promotionWarnings,
+      addedToChannels,
       maillistsUsed,
       date,
       invitedTo
@@ -273,7 +276,7 @@ class SlackGuestReporter {
           invitedTo.length,
           true
         )}:\n${channelList}`,
-        color: '#36a64f',
+        color: GREEN,
         fields: [
           {
             title: 'Email Address',
@@ -328,7 +331,7 @@ class SlackGuestReporter {
           invitedTo.length,
           true
         )}:\n${channelList}`,
-        color: '#36a64f',
+        color: GREEN,
         fields: [
           {
             title: 'Name',
@@ -369,6 +372,35 @@ class SlackGuestReporter {
               )
               .join('\n'),
             short: false
+          }
+        ]
+      });
+    }
+
+    if (addedToChannels && Object.keys(addedToChannels).length) {
+      const numAdded = Object.keys(addedToChannels).length;
+      message.attachments.push({
+        title: `${numAdded} existing multi-channel ${pluralize(
+          'guests',
+          numAdded
+        )} ${waswere(numAdded, DRY_RUN)} added to channels:`,
+        color: GREEN,
+        fields: [
+          {
+            name: 'Username',
+            value: Object.keys(addedToChannels)
+              .map(u => addedToChannels[u].user.name)
+              .join('\n'),
+            short: true
+          },
+          {
+            name: 'Channels',
+            value: Object.keys(addedToChannels)
+              .map(u =>
+                addedToChannels[u].channels.map(c => `<#${c}>`).join(', ')
+              )
+              .join('\n'),
+            short: true
           }
         ]
       });

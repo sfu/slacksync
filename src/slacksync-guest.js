@@ -112,7 +112,27 @@ const slacksyncGuest = async opts => {
       u => u.is_ultra_restricted && maillistMembers.includes(u.profile.email)
     );
 
-    // get tokens so we can generate and send invitations
+    // existing multi-channel guests who are on the invite list may need to be added to the invite_channel(s)
+    // find those users, get their existing channel memberships, diff with invite_channel
+    // and add to the necessary channels
+    const multiChannelGuests = activeSlackUsers.filter(
+      u =>
+        u.is_restricted &&
+        !u.is_ultra_restricted &&
+        maillistMembers.includes(u.profile.email)
+    );
+
+    const channelAdds = await Promise.all(
+      multiChannelGuests.map(async u => {
+        const memberOf = await slack.getUserChannelIds(u.id, opts.slack_token);
+        const inviteTo = opts.invite_channel.filter(
+          ic => !memberOf.includes(ic)
+        );
+        return { user: u, inviteTo };
+      })
+    );
+
+    // get tokens so we can do the things
     const tokens = await slack.getSlackTokens(
       opts.slack_admin_user,
       opts.slack_admin_password
@@ -170,12 +190,30 @@ const slacksyncGuest = async opts => {
       );
     }
 
+    const channelAddRequests = (await Promise.all(
+      await channelAdds.map(x =>
+        slack.inviteUserToChannels(x, opts.slack_token)
+      )
+    )).reduce((acc, val) => acc.concat(val), []);
+
     results.invited = invitationResponses.filter(r => r.ok);
     results.promoted = promotionResponses.filter(r => r.ok);
-    results.inviteWarnings = invitationResponses.filter(r => !r.ok && r.error);
     results.promotionWarnings = promotionResponses.filter(
       r => !r.ok && r.error
     );
+
+    results.addedToChannels = {};
+
+    channelAddRequests.filter(r => r.ok).forEach(({ user, channel }) => {
+      if (results.addedToChannels.hasOwnProperty(user.id)) {
+        results.addedToChannels[user.id]['channels'].push(channel);
+      } else {
+        results.addedToChannels[user.id] = { user, channels: [channel] };
+      }
+    });
+
+    results.inviteWarnings = invitationResponses.filter(r => !r.ok && r.error);
+
     console.log(results);
 
     if (
@@ -184,7 +222,8 @@ const slacksyncGuest = async opts => {
       (results.invited.length ||
         results.inviteWarnings.length ||
         results.promoted.length ||
-        results.promotionWarnings.length)
+        results.promotionWarnings.length ||
+        Object.keys(results.addedToChannels).length)
     ) {
       const reporter = new SlackGuestReporter(
         opts.reporter_channel,
