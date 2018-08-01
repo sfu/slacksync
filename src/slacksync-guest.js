@@ -131,17 +131,20 @@ const slacksyncGuest = async opts => {
       slack.generateInvitationRequest(i, tokens)
     );
 
-    const promotionRequestData = singleChannelGuestsToPromote.map(u =>
-      slack.generatePromotionRequestDataForUser(
-        u,
-        opts.invite_channel,
-        tokens.apiToken
-      )
-    );
+    let promotionRequestData, promotionRequests, promotionResponses;
+    if (opts.invite_channel.length > 1) {
+      promotionRequestData = singleChannelGuestsToPromote.map(u =>
+        slack.generatePromotionRequestDataForUser(
+          u,
+          opts.invite_channel,
+          tokens.apiToken
+        )
+      );
 
-    const promotionRequests = promotionRequestData.map(i =>
-      slack.convertSingleChannelGuestToMultiChannel(i, tokens)
-    );
+      promotionRequests = promotionRequestData.map(i =>
+        slack.convertSingleChannelGuestToMultiChannel(i, tokens)
+      );
+    }
 
     let invitationResponses = (await Promise.all(invitationRequests)).map(
       (result, i) => {
@@ -155,15 +158,17 @@ const slacksyncGuest = async opts => {
       }
     );
 
-    let promotionResponses = (await Promise.all(promotionRequests)).map(
-      (result, i) => {
-        return {
-          ...JSON.parse(result),
-          username: singleChannelGuestsToPromote[i].name,
-          name: singleChannelGuestsToPromote[i].real_name
-        };
-      }
-    );
+    if (opts.invite_channel.length > 1 && promotionRequests) {
+      promotionResponses = (await Promise.all(promotionRequests)).map(
+        (result, i) => {
+          return {
+            ...JSON.parse(result),
+            username: singleChannelGuestsToPromote[i].name,
+            name: singleChannelGuestsToPromote[i].real_name
+          };
+        }
+      );
+    }
 
     results.invited = invitationResponses.filter(r => r.ok);
     results.promoted = promotionResponses.filter(r => r.ok);
