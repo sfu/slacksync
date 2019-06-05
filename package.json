@@ -11,7 +11,8 @@
   },
   "bin": {
     "slacksync": "src/cli.js",
-    "slacksync-guest": "src/cli-guest.js"
+    "slacksync-guest": "src/cli-guest.js",
+    "slack-channelsync": "src/cli-channelsync.js"
   },
   "repository": {
     "type": "git",
