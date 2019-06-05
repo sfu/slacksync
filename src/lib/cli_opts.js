@@ -141,4 +141,19 @@ const slacksyncGuestOptions = [
   }
 ];
 
-module.exports = { slacksyncOptions, slacksyncGuestOptions };
+const channelsyncOptions = [
+  ...commonOptions,
+  {
+    names: ['channel'],
+    type: 'string',
+    env: 'SLACKSYNC_CHANNEL_ID',
+    helpArg: 'CHANNEL_ID',
+    help: `The channel that should be sync'd with maillist membership`
+  }
+];
+
+module.exports = {
+  slacksyncOptions,
+  slacksyncGuestOptions,
+  channelsyncOptions
+};
