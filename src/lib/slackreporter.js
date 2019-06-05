@@ -1,7 +1,7 @@
 const dedent = require('dedent-js');
 const moment = require('moment');
 const pluralize = require('pluralize');
-const postMessage = require('slack/methods/chat.postMessage');
+const slack = require('slack');
 const { SLACK_INVITE_ERRORS } = require('./constants');
 
 const GREEN = '#36a64f';
@@ -23,7 +23,7 @@ class SlackReporter {
   async post() {
     return new Promise((resolve, reject) => {
       const { text, attachments } = this.formatMessage();
-      postMessage(
+      slack.chat.postMessage(
         {
           token: this.token,
           channel: this.channel,
