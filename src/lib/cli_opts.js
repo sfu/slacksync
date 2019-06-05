@@ -149,6 +149,13 @@ const channelsyncOptions = [
     env: 'SLACKSYNC_CHANNEL_ID',
     helpArg: 'CHANNEL_ID',
     help: `The channel that should be sync'd with maillist membership`
+  },
+  {
+    names: ['slack-token-owner'],
+    type: 'string',
+    env: 'SLACKSYNC_TOKEN_OWNER_USER_ID',
+    helpArg: 'USER_ID',
+    help: 'The Slack user ID of the user who owns the slack-token'
   }
 ];
 
