@@ -108,18 +108,16 @@ const getSlackTokens = async (username, password) => {
         }-${Date.now() / 1000}`
     );
 
-    const apiToken = await page.evaluate(
-      () =>
-        window.TS && window.TS.boot_data && window.TS.boot_data.api_token
-          ? window.TS.boot_data.api_token
-          : undefined
+    const apiToken = await page.evaluate(() =>
+      window.TS && window.TS.boot_data && window.TS.boot_data.api_token
+        ? window.TS.boot_data.api_token
+        : undefined
     );
 
-    const slackApiTS = await page.evaluate(
-      () =>
-        window.TS && window.TS.boot_data && window.TS.boot_data.version_ts
-          ? window.TS.boot_data.version_ts
-          : undefined
+    const slackApiTS = await page.evaluate(() =>
+      window.TS && window.TS.boot_data && window.TS.boot_data.version_ts
+        ? window.TS.boot_data.version_ts
+        : undefined
     );
 
     const cookies = await page.cookies();
@@ -153,11 +151,10 @@ const getPendingInvitations = async (username, password) => {
         polling: 500
       }
     );
-    const pending = await page.evaluate(
-      () =>
-        window && window.boot_data && window.boot_data.pending_invites
-          ? window.boot_data.pending_invites
-          : undefined
+    const pending = await page.evaluate(() =>
+      window && window.boot_data && window.boot_data.pending_invites
+        ? window.boot_data.pending_invites
+        : undefined
     );
     await browser.close();
     return pending;

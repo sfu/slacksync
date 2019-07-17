@@ -9,37 +9,13 @@
 const Slack = require('slack');
 const { getMaillistMembers } = require('./lib/maillist');
 
-const getChannelType = async (client, channel) => {
-  try {
-    // try for public channel first
-    await client.channels.info({ channel });
-    return 'PUBLIC';
-  } catch (error) {
-    // try for private channel first:
-    if (error.message === 'method_not_supported_for_channel_type') {
-      try {
-        await client.groups.info({ channel });
-        return 'PRIVATE';
-      } catch (error) {
-        throw error;
-      }
-    } else {
-      // otherwise throw the error
-      throw error;
-    }
-  }
-};
-
 const getChannelMembers = async (client, channel) => {
   try {
-    const channelType = await getChannelType(client, channel);
-    if (channelType === 'PUBLIC') {
-      const info = await client.channels.info({ channel });
-      return info.channel.members;
-    } else {
-      const info = await client.groups.info({ channel });
-      return info.group.members;
-    }
+    const response = await client.conversations.members({
+      channel,
+      limit: 1000
+    });
+    return response.members;
   } catch (error) {
     throw error;
   }
@@ -56,9 +32,7 @@ const getSlackUsers = async client => {
 
 const inviteUser = async (client, user, channel) => {
   try {
-    const channelType = await getChannelType(client, channel);
-    const subject = channelType === 'PUBLIC' ? 'channels' : 'groups';
-    const result = await client[subject].invite({ channel, user });
+    const result = await client.conversations.invite({ channel, user });
     return result;
   } catch (error) {
     throw error;
@@ -67,9 +41,7 @@ const inviteUser = async (client, user, channel) => {
 
 const kickUser = async (client, user, channel) => {
   try {
-    const channelType = await getChannelType(client, channel);
-    const subject = channelType === 'PUBLIC' ? 'channels' : 'groups';
-    const result = await client[subject].kick({ channel, user });
+    const result = await client.conversations.kick({ channel, user });
     return result;
   } catch (error) {
     throw error;
@@ -118,7 +90,8 @@ const channelsync = async opts => {
     const usersToInvite = maillistMembersAddresses
       .filter(address => !channelMembersEmailAddresses.includes(address))
       .map(address => slackUsers.find(u => u.profile.email === address))
-      .filter(Boolean);
+      .filter(Boolean)
+      .filter(member => !member.is_restricted || !member.is_ultra_restricted);
 
     // users to kick from the channel
     // channel members who are not in the maillist members list
