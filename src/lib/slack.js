@@ -7,7 +7,8 @@ const {
   SLACK_SCIM_BASE,
   SLACK_ADMIN_URL,
   SLACK_USER_INVITE_API,
-  SLACK_USER_SET_RESTRICTED_API
+  SLACK_USER_SET_RESTRICTED_API,
+  SLACK_USER_SET_REGULAR_API
 } = require('./constants');
 
 function getUserList(token) {
@@ -228,6 +229,22 @@ const convertSingleChannelGuestToMultiChannel = (
     }
   });
 
+const convertGuestToRegularUser = (formData, { xId, slackApiTS, cookies }) =>
+  request({
+    method: 'POST',
+    url: `${SLACK_USER_SET_REGULAR_API}?_x_id=${xId}`,
+    formData,
+    headers: {
+      accept: '*/*',
+      'cache-control': 'no-cache',
+      cookie: cookies.map(c => `${c.name}=${c.value}`).join('; '),
+      'x-slack-version-ts': slackApiTS,
+      origin: 'https://sfuits.slack.com',
+      'user-agent':
+        'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/65.0.3325.181 Safari/537.36'
+    }
+  });
+
 const getUserChannelIds = (user, token) =>
   new Promise((resolve, reject) => {
     axios({
@@ -307,6 +324,7 @@ module.exports = {
   generatePromotionRequestDataForUser,
   generateInvitationRequest,
   convertSingleChannelGuestToMultiChannel,
+  convertGuestToRegularUser,
   getUserChannelIds,
   inviteUserToChannels
 };
