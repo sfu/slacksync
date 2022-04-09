@@ -46,7 +46,7 @@
     "axios": "0.19.0",
     "dashdash": "1.14.1",
     "dedent-js": "1.0.1",
-    "moment": "2.24.0",
+    "moment": "2.29.2",
     "pluralize": "8.0.0",
     "puppeteer": "1.18.1",
     "request": "2.88.0",
